@@ -1,7 +1,13 @@
-# Lab 17 — Report (≤ 1 trang, chưa tính phần 5)
+# K4-Track02-Day17 — Report cá nhân
+
+Phần phân tích tối đa một trang, không tính output ở phần 5.
+Định dạng tham chiếu và phạm vi tính trang: [SUBMISSION.md](../docs/SUBMISSION.md).
 
 **Họ tên / MSSV:**
 **Repo:**
+**Commit bài nộp:**
+**AI đã dùng và phạm vi hỗ trợ (hoặc không dùng):**
+**Nguồn tham khảo khác (nếu có):**
 
 ## 1. Ba lỗi
 
@@ -42,5 +48,14 @@ $ make verify
 
 $ make test
 
+$ make rerun3
+
+$ make lateness
+
+$ make dbt
+
 $ make parity
 ```
+
+Nếu dùng PowerShell, ghi lệnh tương đương và output thực tế theo [SUBMISSION.md](../docs/SUBMISSION.md).
+Nếu làm bonus, thêm output B1 hoặc đường dẫn bằng chứng B2 ở cuối phần này.

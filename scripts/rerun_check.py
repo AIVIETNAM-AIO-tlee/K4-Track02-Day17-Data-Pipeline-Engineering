@@ -3,8 +3,8 @@
     "Chạy lại một ngày cũ ba lần liên tiếp, ghi checksum bảng Gold sau mỗi lần.
      Ba con số phải giống hệt nhau."
 
-    python rerun_check.py                  # re-runs config.RERUN_DAY (2026-08-12)
-    python rerun_check.py --day 2026-08-14
+    python -m scripts.rerun_check                  # re-runs config.RERUN_DAY (2026-08-12)
+    python -m scripts.rerun_check --day 2026-08-14
 
 1. fresh build from Bronze (reset Silver/Gold, backfill every day)  -> checksum C0
 2. re-run the old day three times                                   -> C1, C2, C3

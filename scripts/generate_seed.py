@@ -1,6 +1,6 @@
 """Regenerate the seed data in data/ — deterministic, no randomness.
 
-    python scripts/generate_seed.py
+    python -m scripts.generate_seed
 
 You do NOT need to run this for the lab: the generated files are committed.
 It exists so instructors can see (and change) every planted story in one place.

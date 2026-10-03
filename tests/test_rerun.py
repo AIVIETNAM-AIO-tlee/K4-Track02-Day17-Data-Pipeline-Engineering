@@ -10,6 +10,6 @@ from pipeline import config
 
 
 def test_rerun_old_day_three_times_keeps_gold_checksum(sandbox):
-    from rerun_check import rerun_check
+    from scripts.rerun_check import rerun_check
     res = rerun_check(config.RERUN_DAY, write=False, quiet=True)
     assert res["ok"], res["runs"]

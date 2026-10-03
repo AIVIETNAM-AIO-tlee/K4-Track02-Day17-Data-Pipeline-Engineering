@@ -1,6 +1,6 @@
 """dbt track: same Bronze in, same answer out?
 
-    python parity.py          (after `make dbt`)
+    python -m scripts.parity          (after `make dbt`)
 
 Compares the dbt build (dbt_project/dbt.duckdb) with the lite pipeline
 (warehouse.duckdb, rebuilt fresh here) on the two tables both implement:

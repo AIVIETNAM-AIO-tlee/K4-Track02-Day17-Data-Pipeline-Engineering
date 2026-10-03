@@ -2,12 +2,12 @@
 # The lite path needs none of this.
 #
 #   docker compose -f docker/docker-compose.yml up
-#   open http://localhost:8080   (admin password is printed in the logs / standalone_admin_password.txt)
+#   open http://localhost:8080   (credentials: see logs and docs/AIRFLOW.md)
 #   docker compose -f docker/docker-compose.yml exec airflow \
 #       airflow backfill create --dag-id day17_support_pipeline \
-#       --from-date 2026-08-10 --to-date 2026-08-16
+#       --from-date 2026-08-10 --to-date 2026-08-16 --max-active-runs 1
 #
-# Pin a newer 3.x tag if one is out; the DAG only uses the public airflow.sdk API.
+# Keep the pinned image while reproducing this lab; task imports use airflow.sdk.
 services:
   airflow:
     image: apache/airflow:3.3.2

@@ -1,6 +1,9 @@
-# Bonus B2 (lựa chọn b) — Day 17: Phiên Brainstorm Bài Toán Thực Tế (tùy chọn, +10đ)
+# K4-Track02-Day17 — Bonus B2: Brainstorm bài toán thực tế (tùy chọn, tối đa +5đ)
 
 > 🇬🇧 English: [`BONUS-CHALLENGE-EN.md`](BONUS-CHALLENGE-EN.md)
+
+Đây là một trong hai lựa chọn của B2 trong [RUBRIC.md](../RUBRIC.md).
+B2 tối đa 5 điểm; B1 và B2 cộng tối đa 10 điểm. Bài thiết kế được làm và nộp cá nhân.
 
 Lab lõi cho bạn một pipeline (và ba lỗi để sửa). Nhưng data engineering thật **không có
 đề bài** — nó là phán đoán dưới sự mơ hồ. Bonus này **không phải một task định
@@ -55,8 +58,8 @@ các quyết định kỹ thuật thật mà lab đã chạm tới:
    ngược ở đâu? Backfill an toàn thế nào?
 9. **Chi phí & vận hành.** Ai trả tiền cho pipeline này mỗi tháng? Đâu là 80% chi
    phí? Bạn cắt ở đâu mà không hại chất lượng?
-10. **Bối cảnh Việt Nam.** Tiếng Việt có dấu, PDPL (Luật 91/2025), hạ tầng/băng
-    thông — điều gì đổi so với một bài blog tiếng Anh?
+10. **Bối cảnh Việt Nam.** Tiếng Việt có dấu, bảo vệ dữ liệu cá nhân, hạ tầng/băng
+    thông — điều gì cần tính đến khi thiết kế cho người dùng Việt Nam?
 
 > Không cần trả lời *hết* 10 câu. Chọn 4–6 câu **then chốt** với bài toán của bạn
 > và đào sâu. Một câu trả lời thật, có đánh đổi, hơn mười câu hời hợt.

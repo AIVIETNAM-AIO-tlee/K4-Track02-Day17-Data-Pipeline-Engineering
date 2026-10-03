@@ -29,10 +29,10 @@ lateness: ## Measure event lateness (P50/P95/P99) from Bronze   (python main.py 
 	@$(PY) main.py --lateness
 
 rerun3: ## GRADING TEST: fresh build, re-run 2026-08-12 three times, compare checksums
-	@$(PY) rerun_check.py
+	@$(PY) -m scripts.rerun_check
 
 verify: ## All pipeline contracts (18 checks) — a fresh clone FAILS: that is the lab
-	@$(PY) verify.py
+	@$(PY) -m scripts.verify
 
 test: ## pytest (unit tests + table contracts + extensions)
 	@$(PY) -m pytest
@@ -42,10 +42,10 @@ dbt: ## dbt track: land Bronze, dbt build (merge + microbatch + unit test)
 	cd dbt_project && DBT_PROFILES_DIR=. $(DBT) build --event-time-start 2026-08-10 --event-time-end 2026-08-17
 
 parity: ## dbt track: same Bronze in -> same checksum out (lite vs dbt)
-	@$(PY) parity.py
+	@$(PY) -m scripts.parity
 
 bonus-llm: ## Bonus: LLM labelling step with hash cache + validation
-	@$(PY) bonus_llm.py
+	@$(PY) -m scripts.bonus_llm
 
 flywheel: ## Extension (ungraded): agent traces -> eval set + DPO pairs
 	@$(PY) -m extensions.flywheel

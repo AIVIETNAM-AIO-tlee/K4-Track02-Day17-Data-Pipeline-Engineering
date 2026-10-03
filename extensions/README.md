@@ -1,12 +1,16 @@
-# Extensions (không chấm) — phần còn giá trị của lab Day 17 bản cũ
+# K4-Track02-Day17 — Extensions (không chấm điểm)
 
-Hai bài này không nằm trong slide Ngày 17 bản 10/2026, nhưng vẫn là kỹ thuật
-pipeline dữ liệu cho AI đáng làm khi còn thời gian.
+Hai bài này là thực hành thêm về pipeline dữ liệu cho AI, độc lập với các tiêu chí
+bắt buộc và bonus trong [RUBRIC.md](../docs/RUBRIC.md). Làm khi đã hoàn thành phần bắt buộc.
 
 ```bash
 make flywheel     # python -m extensions.flywheel
 make kg           # python -m extensions.kg_demo
 ```
+
+Trên Windows PowerShell, thay `make flywheel` bằng
+`.\.venv\Scripts\python.exe -m extensions.flywheel` và `make kg` bằng
+`.\.venv\Scripts\python.exe -m extensions.kg_demo`.
 
 ## 1. Flywheel dữ liệu của agent — `traces.py`, `dataset.py`, `features.py`
 

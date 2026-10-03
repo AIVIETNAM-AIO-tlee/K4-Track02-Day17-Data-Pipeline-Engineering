@@ -1,6 +1,9 @@
-# Bonus B2 (option b) — Day 17: A Brainstorm Session on Real-World Problems (optional, +10 pts)
+# K4-Track02-Day17 — Bonus B2: Real-world design brainstorm (optional, up to +5 pts)
 
 > 🇻🇳 Tiếng Việt (mặc định): [`BONUS-CHALLENGE.md`](BONUS-CHALLENGE.md)
+
+This is one of the two B2 options in [RUBRIC.md](../RUBRIC.md).
+B2 awards up to 5 points; B1 and B2 together award up to 10. Submit your own individual design.
 
 The core lab hands you a pipeline (and three bugs to fix). But real data engineering **has no
 problem statement** — it's judgment under ambiguity. This bonus is **not a fixed
@@ -56,8 +59,8 @@ real engineering decisions the lab touched:
    side-effects? How is a backfill made safe?
 9. **Cost & operations.** Who pays for this pipeline monthly? Where's 80% of the
    cost? Where can you cut without hurting quality?
-10. **Vietnamese context.** Accented Vietnamese, PDPL (Law 91/2025), infra /
-    bandwidth — what changes versus an English blog post?
+10. **Vietnamese context.** Accented Vietnamese, personal-data protection, infrastructure /
+    bandwidth — what must you account for when designing for users in Vietnam?
 
 > You don't have to answer *all 10*. Pick the **4–6 that are load-bearing** for
 > your problem and go deep. One real answer with a tradeoff beats ten shallow ones.

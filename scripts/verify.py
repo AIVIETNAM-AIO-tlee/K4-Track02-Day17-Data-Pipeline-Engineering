@@ -1,6 +1,6 @@
 """End-to-end contract check (zero-key). Exit 0 = every contract of the pipeline holds.
 
-    python verify.py
+    python -m scripts.verify
 
 The repo ships with THREE planted bugs, so a fresh clone prints FAILURES.
 Your job (Lab 17): make this print ALL PASS without weakening any check.
@@ -16,7 +16,7 @@ from pipeline.gold import feature_daily_full_recompute_sql, lateness_profile
 from pipeline.checksum import query_checksum
 from pipeline.run import connect, run_day
 from main import fresh_build
-from rerun_check import rerun_check
+from scripts.rerun_check import rerun_check
 
 PII_RE = re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}"
                     r"|(\+84|0)[ .-]?[0-9]{2,3}[ .-]?[0-9]{3}[ .-]?[0-9]{3,4}")

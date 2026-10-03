@@ -2,7 +2,7 @@
 
 Airflow 3 changes you can see here (slide "Airflow 2 -> 3"):
   * imports come from `airflow.sdk`
-  * catchup defaults to False (we still write it: this file may run on 2.x clusters)
+  * catchup defaults to False (explicit here; this DAG requires Airflow 3)
   * backfill is a scheduler-managed object:  airflow backfill create ...
   * every run records which DAG version produced it (DAG versioning)
 
@@ -36,7 +36,7 @@ def _ingest_day() -> str:
     start_date=pendulum.datetime(2026, 8, 10, tz="UTC"),
     end_date=pendulum.datetime(2026, 8, 16, tz="UTC"),
     catchup=False,
-    max_active_runs=1,          # a backfill never overlaps the daily run
+    max_active_runs=1,          # backfill has its own limit; see docs/AIRFLOW.md
     tags=["day17", "track2"],
 )
 def day17_support_pipeline():

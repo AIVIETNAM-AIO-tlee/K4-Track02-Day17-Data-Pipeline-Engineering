@@ -1,6 +1,9 @@
-# Lab 17 — Data Pipeline Engineering (Track 2)
+# K4-Track02-Day17-Data-Pipeline-Engineering
 
 > 🇻🇳 Vietnamese version (default): [`README.md`](README.md)
+
+**Format: individual assignment.** This lab is for K4, Track 02, Day 17.
+Assignment repository name: `K4-Track02-Day17-Data-Pipeline-Engineering`.
 
 Build the data pipeline behind an **AI customer-support platform** — the running
 example of the Day 17 deck — then **fix three planted bugs** and prove the pipeline
@@ -16,6 +19,57 @@ S3 transcripts (JSON) ─────────────┘   Parquet,     
 Everything runs **zero-key and cross-platform** on DuckDB + Python. No Docker, no
 cloud. The dbt track reads the same Bronze.
 
+The diagram describes the source-system scenario. The lab simulates Postgres/CDC,
+Kafka and S3 with local JSON/JSONL files in `data/`; those services are not running.
+`gold_doc_chunks` uses 16-dimensional hash vectors to exercise chunking and caching,
+not semantic embeddings or a complete RAG system. PII regexes mask email addresses
+and phone numbers; names and old snapshots are discussed in the reflection questions.
+
+## Learning objectives
+
+- Explain the Bronze, Silver and Gold commitments and parse Debezium CDC.
+- Apply keyed writes, preserve the newest state and propagate deletes to Gold.
+- Measure lateness from Bronze and handle late arrivals by event time.
+- Verify point-in-time training snapshots, embedding caches and safe re-runs.
+- Compare the Python pipeline with the dbt implementation.
+
+## Preparation and assignment documents
+
+You need Python **3.10+**, Git, a terminal and a GitHub account for a public submission.
+Be familiar with basic Python and SQL joins, aggregation and window functions.
+Install `requirements-dbt.txt` for the required dbt section; Docker is only needed for the Airflow bonus.
+
+| Document | Contents |
+|---|---|
+| [SUBMISSION.md](docs/SUBMISSION.md) | Repository naming, deliverables, deadline and submission checklist |
+| [RUBRIC.md](docs/RUBRIC.md) | 100 required points and up to 10 bonus points |
+| [CHECKPOINTS.md](docs/CHECKPOINTS.md) | Milestones, expected understanding and self-checks |
+| [RULES.md](docs/RULES.md) | AI use, collaboration, late submissions and security |
+| [VIBE-CODING.md](docs/VIBE-CODING.md) | Working with an AI coding agent |
+
+The submission, checkpoint and policy guides are in Vietnamese; the rubric is in English.
+
+Assignment guides live in `docs/`, bonus instructions in `docs/bonus/`, pipeline
+code in `pipeline/`, and verification and seed utilities in `scripts/`.
+Run commands from the repository root. Utilities use `python -m scripts.<name>`,
+for example `python -m scripts.verify`. Existing Makefile targets remain the same.
+
+```text
+K4-Track02-Day17-Data-Pipeline-Engineering/
+├── README.md, README_en.md  # Start here
+├── main.py                 # Pipeline entry point
+├── pipeline/               # Bronze, Silver, Gold and orchestration
+├── scripts/                # Verify, rerun, parity, bonus LLM, seed generator
+├── docs/                   # Submission, rubric, checkpoints, rules, AI guide
+│   └── bonus/              # Vietnamese and English design challenge
+├── tests/                  # Unit tests and contracts
+├── data/                   # Seed inputs
+├── dbt_project/            # SQL models and dbt configuration
+├── docker/                 # Airflow bonus
+├── extensions/             # Flywheel and knowledge graph
+└── submission/             # Submitted report and checksums
+```
+
 ---
 
 ## Your task (2.5 hours)
@@ -23,11 +77,11 @@ cloud. The dbt track reads the same Bronze.
 This repo **ships with 3 bugs on purpose**. A fresh clone prints `FAILURES` on `make verify`.
 
 1. Run the pipeline, read the failing checks, **find the 3 bugs** in `pipeline/`.
-2. **Fix** them — without editing `verify.py`, `tests/`, `data/` or the checksum logic.
+2. **Fix** them — without editing `scripts/verify.py`, `tests/`, `data/` or the checksum logic.
 3. Prove it: `make rerun3` re-runs **2026-08-12 three times**; the three Gold checksums
    must be **identical and equal to a fresh build** (`submission/checksums.txt`).
 4. dbt track: `make dbt` passes and `make parity` shows both implementations agree.
-5. Write `submission/REPORT.md` (≤ 1 page): for each bug — symptom, root cause, fix,
+5. Write `submission/REPORT.md` (analysis ≤ 1 page, excluding command output): for each bug — symptom, root cause, fix,
    deck concept; for each tool choice — why.
 
 Suggested split: 20' read + run · 75' three bugs · 25' dbt · 30' report.
@@ -45,17 +99,22 @@ make rerun3       # THE GRADING TEST: re-run 2026-08-12 three times
 make lateness     # measure event lateness from Bronze (P50 / P95 / P99)
 ```
 
-Without `make` (Windows):
+Without `make` (Windows PowerShell):
 
-```bash
-python -m venv .venv && .venv\Scripts\activate        # macOS/Linux: . .venv/bin/activate
-pip install -r requirements.txt
-python main.py && python verify.py && python rerun_check.py && pytest
-python main.py --date 2026-08-14        # one daily run on the existing warehouse
-python main.py --lateness
+```powershell
+python -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+.\.venv\Scripts\python.exe main.py
+.\.venv\Scripts\python.exe -m scripts.verify
+.\.venv\Scripts\python.exe -m pytest
+.\.venv\Scripts\python.exe -m scripts.rerun_check
+.\.venv\Scripts\python.exe main.py --lateness
 ```
 
-Python **3.10+** for the lite path. The dbt track was tested on Python 3.13.
+The Makefile assumes a Unix-style shell. Use direct commands on Windows PowerShell;
+see [SUBMISSION.md](docs/SUBMISSION.md) for the dbt commands. Failures in the unmodified
+starter are expected. The dbt track was tested on Windows with Python 3.11.4,
+dbt-core 1.12.5 and dbt-duckdb 1.11.0.
 
 ---
 
@@ -65,17 +124,17 @@ Python **3.10+** for the lite path. The dbt track was tested on Python 3.13.
 |---|---|---|---|
 | `data/` | sources | What the source systems deliver each day: Debezium CDC (as Kafka records), Kafka events, transcript exports | Running example |
 | `pipeline/bronze.py` | Bronze | Lands each (source, day) as **one immutable Parquet file**; re-landing is a no-op | Bronze commitment |
-| `pipeline/staging.py` | Bronze→ | Reads the **Debezium envelope** correctly (`before`/`after`/`op`/`lsn`, tombstones) | Log-based CDC |
+| `pipeline/staging.py` | Bronze→ | Parses the **Debezium envelope** (`before`/`after`/`op`/`lsn`, tombstones); delete handling needs fixing | Log-based CDC |
 | `pipeline/quality.py` | gate | **Pydantic** checks every event; bad → `quarantine_events`, the run never halts | Data testing |
-| `pipeline/silver.py` | Silver | `silver_tickets` (**MERGE** on `ticket_id`), `silver_ticket_history` (**SCD2**), `silver_events`, `silver_transcripts`, PII masking | Silver — keyed |
+| `pipeline/silver.py` | Silver | Current tickets, **SCD2** history, events, transcripts and PII masking; ticket writes need a keyed upsert | Silver — keyed |
 | `pipeline/gold.py` | Gold | `gold_feature_daily` (by **event time**, with **lookback**), `gold_training_set` (**versioned snapshots**, point-in-time), `gold_doc_chunks` (embedding cache keyed by **hash + model version**) | Gold — right shape |
 | `pipeline/run.py`, `pipeline/dag.py` | orchestration | One DAG per day; backfill = **the same code path**, day by day | Safe re-runs & backfill |
 | `pipeline/checksum.py` | grading | Row-order-independent checksum (plain SQL, runnable in the DuckDB CLI) | The final test |
-| `rerun_check.py` | grading | Fresh build → re-run an old day 3× → compare checksums | Lab 17 |
-| `dbt_project/` | dbt | The same Silver/Gold in dbt: `merge` + `merge_update_condition`, `microbatch` + `lookback`, contract, unit test | dbt, microbatch |
+| `scripts/rerun_check.py` | grading | Fresh build → re-run an old day 3× → compare checksums | Lab 17 |
+| `dbt_project/` | dbt | Shared tables `silver_tickets`, `gold_feature_daily`: `merge` + `merge_update_condition`, `microbatch` + `lookback`, contract, unit test | dbt, microbatch |
 | `docker/` | bonus | The same daily run on real **Airflow 3** (`airflow.sdk`, `airflow backfill create`) | Airflow 2 → 3 |
 | `pipeline/llm_label.py` | bonus | An **LLM labelling** step — naive; you add the hash cache | LLM as a transform |
-| `extensions/` | extra | Trace → eval/DPO flywheel and knowledge graph (from the previous lab, ungraded) | — |
+| `extensions/` | extra | Trace → eval/DPO flywheel and knowledge graph, ungraded | — |
 
 ---
 
@@ -83,6 +142,8 @@ Python **3.10+** for the lite path. The dbt track was tested on Python 3.13.
 
 Seven days, 2026-08-10 → 2026-08-16, small enough to read by eye
 (`scripts/generate_seed.py` regenerates all of it):
+
+Seed dates are simulated data dates, **not the class date or submission deadline**.
 
 - **T-91** is created `low/open` on 08-10 → `high` on 08-14 → `closed/bug` on 08-16
   (the deck's Silver example). The 08-14 change is **delivered twice** by Kafka.
@@ -144,7 +205,9 @@ make dbt          # land Bronze → dbt build: PASS=19 (models + data tests + un
 make parity       # silver_tickets + gold_feature_daily: lite vs dbt, same checksum
 ```
 
-`dbt_project/` rewrites Silver/Gold the way the deck shows: `silver_tickets` is
+`dbt_project/` implements the two parity tables; it does not implement the Python
+pipeline's SCD2 history, transcripts, quarantine, training snapshots or doc chunks.
+`silver_tickets` is
 `incremental_strategy='merge'` with a `unique_key` and an LSN `merge_update_condition`,
 `gold_feature_daily` is `microbatch` (`batch_size='day'`, `lookback=3`), with a
 contract, `data_tests:` and a **unit test** for the dedup + delete logic. If
@@ -153,37 +216,39 @@ the one you have not finished fixing.
 
 ---
 
-## Bonus (+20, optional)
+## Bonus (up to +10, optional)
 
-- **B1 — An LLM step with a cache** (+10): `pipeline/llm_label.py` calls the LLM for
+- **B1 — An LLM step with a cache** (+5): `pipeline/llm_label.py` calls the LLM for
   every ticket on every run and stores whatever comes back. Make `make bonus-llm` print
   `BONUS PASS`: cache key = hash(input) + model + prompt version, a re-run makes 0
   calls, a new prompt re-labels on purpose, off-schema output → quarantine.
   Zero-key: `FakeLLM` stands in for a real model.
-- **B2 — pick one** (+10): run the daily pipeline on **Airflow 3** (`make docker-up`,
-  then `airflow backfill create ...`, screenshot 7 runs and the checksum), **or** the
-  real-world brainstorm in [`BONUS-CHALLENGE-EN.md`](BONUS-CHALLENGE-EN.md).
+- **B2 — pick one** (+5): run the daily pipeline on **Airflow 3** (`make docker-up`,
+  follow the [Airflow guide](docs/AIRFLOW.md), screenshot 7 runs and the checksum), **or** the
+  real-world brainstorm in [`BONUS-CHALLENGE-EN.md`](docs/bonus/BONUS-CHALLENGE-EN.md).
+
+B1 and B2 together award up to 10 bonus points. The two B2 options do not stack.
+These are lab bonus points; skipping the bonus does not reduce the required score.
 
 ## Extensions (ungraded)
 
 `make flywheel` (agent traces → eval set + DPO pairs, decontamination, ASOF join) and
-`make kg` (knowledge graph vs vector retrieval) — the parts of the previous lab worth
-keeping; see [`extensions/README.md`](extensions/README.md).
+`make kg` (knowledge graph vs vector retrieval); see [`extensions/README.md`](extensions/README.md).
 
 ---
 
 ## Submission
 
-See [`rubric.md`](rubric.md) (100 core + 20 bonus). Submit **one public GitHub URL**
-in the Day 17 LMS box — no PR. The repo must contain:
+Each learner submits **one public GitHub repository URL** in the K4 / Track 02 / Day 17
+LMS assignment, not a PR. Name the submission repository:
+`K4-Track02-Day17-HoVaTen-MSSV-DataPipelineEngineering`.
 
-- your fixed code (the 3 fixes readable in the commit history),
-- `submission/checksums.txt` — produced by `make rerun3`, must say `PASS`,
-- `submission/REPORT.md` — the ≤ 1 page report,
-- the output of `make verify`, `make test`, `make parity` (paste at the end of REPORT),
-- optional: the bonus.
+The default deadline is **23:59 on the lab day, Asia/Ho_Chi_Minh (UTC+7)** unless
+the key coach announces an adjustment. See [SUBMISSION.md](docs/SUBMISSION.md) for the
+deliverables and checks, [RULES.md](docs/RULES.md) for policies, and [RUBRIC.md](docs/RUBRIC.md)
+for scoring.
 
-New to working with an AI coding agent? Read [`VIBE-CODING.md`](VIBE-CODING.md) first —
+New to working with an AI coding agent? Read [`VIBE-CODING.md`](docs/VIBE-CODING.md) first —
 and remember: your REPORT must explain every line you changed.
 
 The lakehouse table formats Bronze/Gold land in are **Day 18**; the feature store /

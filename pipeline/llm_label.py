@@ -13,7 +13,7 @@ expensive, slow and NOT deterministic, so the slide's four rules apply:
 
 The shipped `label_tickets` is the NAIVE version: it calls the model for every
 ticket on every run and writes whatever comes back. Your bonus task is to make
-`python bonus_llm.py` print BONUS PASS. Zero-key: `FakeLLM` stands in for a
+`python -m scripts.bonus_llm` print BONUS PASS. Zero-key: `FakeLLM` stands in for a
 real model (swap in any provider via .env if you like — the pipeline is the same).
 """
 from __future__ import annotations

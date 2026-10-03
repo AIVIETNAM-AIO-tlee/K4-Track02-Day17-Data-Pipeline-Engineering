@@ -173,30 +173,21 @@ Vòng 4: Bạn review diff line-by-line.
 
 ---
 
-## CLI tool recommendations
+## Chọn công cụ phù hợp với bài lab
 
-Lab này khuyến khích **CLI vibe-coding** — git-native, terminal-friendly,
-review diff dễ. Ba CLI tool nổi bật 2026:
+K4-Track02-Day17 không bắt buộc dùng AI, CLI agent hay một nhà cung cấp cụ thể.
+Bạn có thể dùng editor, IDE hoặc công cụ AI đang có; bài lab chạy zero-key.
+Không cần mua subscription hay API key để hoàn thành phần bắt buộc.
 
-| Tool | Best at | Weak at |
-|---|---|---|
-| **Claude Code** (Anthropic) | Multi-file plans, careful edits, longer reasoning, in-terminal TodoWrite + plan mode | Slower cho 1-line fixes; cần Anthropic API key hoặc subscription |
-| **Codex CLI** (OpenAI) | Fast iteration, tight integration với GPT/o1 family, agent mode chạy command thực | Mới hơn, ecosystem still evolving; cần OpenAI key |
-| **OpenCode** (open-source) | Terminal-first TUI, multi-provider (Anthropic/OpenAI/local Ollama), no vendor lock-in | Smaller community than Claude Code; cần config provider lần đầu |
+Nếu dùng AI, chọn công cụ cho phép đọc thay đổi, chạy lệnh và kiểm tra kết quả:
 
-**Why CLI over IDE?** Trong terminal bạn dễ:
-- Review diff (`git diff`) trước khi accept
-- Pipe output qua tools khác (`benchmark.py | grep PASS`)
-- Reproduce y hệt trên server / CI / pair programming session
-- Commit + push + revert mà không rời context
+- Review diff bằng `git diff` trước khi chấp nhận code.
+- Chạy verify, tests và rerun trên máy của bạn.
+- Ghi công cụ và phạm vi hỗ trợ trong REPORT; giải thích được code đã sửa.
 
-**Project conventions file** — commit 1 file ở repo root để CLI tool tự
-đọc + respect, giảm prompt boilerplate:
-- `CLAUDE.md` — Claude Code
-- `AGENTS.md` — Codex CLI, OpenCode (de-facto standard 2025+)
-
-Đa số CLI tool đọc fallback tới `AGENTS.md` nếu không có file riêng,
-nên 1 file `AGENTS.md` thường đủ cho cả 3 tool. Không cần duplicate.
+Có thể viết file hướng dẫn cho coding agent nếu công cụ hỗ trợ; kiểm tra cách
+công cụ đó nạp hướng dẫn, không mặc định mọi công cụ đọc cùng một file.
+Quy định chính thức của bài nằm trong [RULES.md](RULES.md).
 
 ---
 

@@ -1,6 +1,6 @@
 """BONUS checker — the LLM labelling step (see pipeline/llm_label.py).
 
-    python bonus_llm.py
+    python -m scripts.bonus_llm
 
 Runs the labelling step on a fresh warehouse twice, then once more with a new
 prompt version, and checks the slide's rules:
