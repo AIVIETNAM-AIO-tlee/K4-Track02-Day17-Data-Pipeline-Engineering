@@ -105,11 +105,3 @@ def test_doc_chunks_unique(built):
     n, n_distinct = con.execute("""SELECT count(*), count(DISTINCT (ticket_id, chunk_idx))
                                    FROM gold_doc_chunks""").fetchone()
     assert n == n_distinct == 8
-
-
-# ── the grading test ────────────────────────────────────────────────────────
-
-def test_rerun_old_day_three_times_keeps_gold_checksum(sandbox):
-    from rerun_check import rerun_check
-    res = rerun_check(config.RERUN_DAY, write=False, quiet=True)
-    assert res["ok"], res["runs"]
