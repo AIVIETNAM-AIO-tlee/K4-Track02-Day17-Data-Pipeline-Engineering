@@ -1,0 +1,38 @@
+[
+  {
+    "ticket_id": "T-91",
+    "exported_at": "2026-08-16T23:00:00Z",
+    "turns": [
+      {
+        "role": "customer",
+        "text": "Tải file PDF khoảng 40MB lên là ứng dụng tự thoát, thử 3 lần đều vậy."
+      },
+      {
+        "role": "agent",
+        "text": "Cảm ơn anh. Giới hạn hiện tại là 25MB mỗi file, em đã ghi nhận lỗi crash để đội kỹ thuật kiểm tra."
+      },
+      {
+        "role": "agent",
+        "text": "Đội kỹ thuật đã tái hiện được lỗi, mức ưu tiên được nâng lên cao."
+      },
+      {
+        "role": "agent",
+        "text": "Bản 4.12 đã sửa lỗi crash và nâng giới hạn lên 100MB. Anh cập nhật ứng dụng giúp em."
+      }
+    ]
+  },
+  {
+    "ticket_id": "T-93",
+    "exported_at": "2026-08-16T23:00:00Z",
+    "turns": [
+      {
+        "role": "customer",
+        "text": "Làm sao để mời thêm 5 thành viên vào workspace của nhóm?"
+      },
+      {
+        "role": "agent",
+        "text": "Anh vào Cài đặt, chọn Thành viên, bấm Mời và nhập email từng người."
+      }
+    ]
+  }
+]

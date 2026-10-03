@@ -1,0 +1,76 @@
+version: 2
+
+models:
+  - name: silver_tickets
+    description: One row per ticket (deleted tickets are tombstones). PII masked.
+    config:
+      contract: {enforced: true}
+    columns:
+      - name: ticket_id
+        data_type: varchar
+        constraints: [{type: not_null}]
+        data_tests: [unique, not_null]
+      - name: user_id
+        data_type: varchar
+      - name: subject
+        data_type: varchar
+      - name: body
+        data_type: varchar
+      - name: priority
+        data_type: varchar
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['low', 'medium', 'high']
+      - name: status
+        data_type: varchar
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['open', 'pending', 'closed']
+      - name: category
+        data_type: varchar
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['bug', 'billing', 'other']
+      - name: created_at
+        data_type: timestamp
+      - name: updated_at
+        data_type: timestamp
+      - name: is_deleted
+        data_type: boolean
+        data_tests: [not_null]
+      - name: _lsn
+        data_type: bigint
+        data_tests: [not_null]
+      - name: _batch_id
+        data_type: varchar
+
+  - name: silver_events
+    description: One row per event_id; malformed events never get here.
+    columns:
+      - name: event_id
+        data_tests: [unique, not_null]
+      - name: user_id
+        data_tests: [not_null]
+
+unit_tests:
+  - name: silver_tickets_latest_change_wins_and_delete_is_tombstone
+    description: >
+      Two changes of T-1 (keep the higher LSN), and a Debezium delete of T-2
+      whose key only exists in `before` (staging already resolved it).
+    model: silver_tickets
+    overrides:
+      macros:
+        is_incremental: false
+    given:
+      - input: ref('stg_ticket_changes')
+        rows:
+          - {ticket_id: T-1, _op: c, _lsn: 10, user_id: u1, subject: s, body: "mail a@b.co", priority: low, status: open, category: null, _batch_id: "2026-08-10"}
+          - {ticket_id: T-1, _op: u, _lsn: 20, user_id: u1, subject: s, body: "mail a@b.co", priority: high, status: open, category: bug, _batch_id: "2026-08-11"}
+          - {ticket_id: T-2, _op: d, _lsn: 30, user_id: null, subject: null, body: null, priority: null, status: null, category: null, _batch_id: "2026-08-12"}
+    expect:
+      rows:
+        - {ticket_id: T-1, priority: high, category: bug, body: "mail <EMAIL>", is_deleted: false, _lsn: 20}
+        - {ticket_id: T-2, priority: null, category: null, body: null, is_deleted: true, _lsn: 30}

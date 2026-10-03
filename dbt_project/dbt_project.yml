@@ -1,0 +1,20 @@
+name: day17_support_pipeline
+version: "2.0.0"
+config-version: 2
+profile: day17
+
+model-paths: ["models"]
+macro-paths: ["macros"]
+
+flags:
+  send_anonymous_usage_stats: false
+
+models:
+  day17_support_pipeline:
+    staging:
+      +materialized: view
+    silver:
+      +materialized: incremental
+      +on_schema_change: fail
+    gold:
+      +materialized: incremental

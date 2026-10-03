@@ -1,0 +1,16 @@
+[
+  {
+    "ticket_id": "T-91",
+    "exported_at": "2026-08-10T23:00:00Z",
+    "turns": [
+      {
+        "role": "customer",
+        "text": "Tải file PDF khoảng 40MB lên là ứng dụng tự thoát, thử 3 lần đều vậy."
+      },
+      {
+        "role": "agent",
+        "text": "Cảm ơn anh. Giới hạn hiện tại là 25MB mỗi file, em đã ghi nhận lỗi crash để đội kỹ thuật kiểm tra."
+      }
+    ]
+  }
+]

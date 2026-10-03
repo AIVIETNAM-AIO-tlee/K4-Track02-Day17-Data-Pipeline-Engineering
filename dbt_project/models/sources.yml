@@ -1,0 +1,14 @@
+version: 2
+
+sources:
+  - name: bronze
+    description: >
+      Immutable Bronze Parquet landed by `python main.py --land-only`
+      (one file per source per ingest day). dbt only reads it.
+    meta:
+      external_location: "../lake/bronze/{name}/ingest_date=*/part-0.parquet"
+    tables:
+      - name: tickets
+        description: Debezium CDC records of Postgres `tickets`, as Kafka records.
+      - name: events
+        description: Kafka topic support.events (clicks + feedback).

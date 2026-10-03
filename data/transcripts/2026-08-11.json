@@ -1,0 +1,30 @@
+[
+  {
+    "ticket_id": "T-84",
+    "exported_at": "2026-08-11T23:00:00Z",
+    "turns": [
+      {
+        "role": "customer",
+        "text": "Hoá đơn VAT tháng 7 ghi sai mã số thuế công ty, cần xuất lại."
+      },
+      {
+        "role": "agent",
+        "text": "Em đã xuất lại hoá đơn điện tử với mã số thuế đúng và gửi vào email kế toán của công ty."
+      }
+    ]
+  },
+  {
+    "ticket_id": "T-97",
+    "exported_at": "2026-08-11T23:00:00Z",
+    "turns": [
+      {
+        "role": "customer",
+        "text": "Tôi là Nguyễn Văn An, email nguyenvanan@gmail.com, sđt 0912 345 678. Xin xoá toàn bộ dữ liệu của tôi."
+      },
+      {
+        "role": "agent",
+        "text": "Em đã tiếp nhận yêu cầu xoá dữ liệu, thời hạn xử lý tối đa 72 giờ."
+      }
+    ]
+  }
+]

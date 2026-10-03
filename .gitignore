@@ -1,0 +1,24 @@
+.venv*/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# everything the pipeline builds is reproducible from data/
+lake/
+warehouse.duckdb
+warehouse.duckdb.wal
+datasets/
+
+# dbt
+dbt_project/dbt.duckdb
+dbt_project/dbt.duckdb.wal
+dbt_project/target/
+dbt_project/logs/
+dbt_project/.user.yml
+
+# docker bonus
+docker/dags/warehouse.duckdb*
+docker/dags/lake/
+logs/
+
+.env

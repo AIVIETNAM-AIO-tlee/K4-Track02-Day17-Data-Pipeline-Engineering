@@ -1,0 +1,16 @@
+[
+  {
+    "ticket_id": "T-86",
+    "exported_at": "2026-08-15T23:00:00Z",
+    "turns": [
+      {
+        "role": "customer",
+        "text": "Gọi lại cho tôi qua +84 987 654 321 để hỗ trợ đăng nhập SSO công ty."
+      },
+      {
+        "role": "agent",
+        "text": "Lỗi do chứng chỉ SAML hết hạn phía công ty anh. Sau khi cập nhật chứng chỉ, anh đăng nhập lại được."
+      }
+    ]
+  }
+]

@@ -1,0 +1,16 @@
+[
+  {
+    "ticket_id": "T-85",
+    "exported_at": "2026-08-12T23:00:00Z",
+    "turns": [
+      {
+        "role": "customer",
+        "text": "Tôi muốn xuất báo cáo doanh thu theo tuần ra file Excel."
+      },
+      {
+        "role": "agent",
+        "text": "Chị vào Báo cáo, chọn khoảng thời gian, bấm Xuất và chọn định dạng XLSX."
+      }
+    ]
+  }
+]

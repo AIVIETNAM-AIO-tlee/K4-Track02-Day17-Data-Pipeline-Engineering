@@ -1,0 +1,24 @@
+# Optional bonus — run the daily pipeline on a REAL Airflow 3 (standalone, LocalExecutor).
+# The lite path needs none of this.
+#
+#   docker compose -f docker/docker-compose.yml up
+#   open http://localhost:8080   (admin password is printed in the logs / standalone_admin_password.txt)
+#   docker compose -f docker/docker-compose.yml exec airflow \
+#       airflow backfill create --dag-id day17_support_pipeline \
+#       --from-date 2026-08-10 --to-date 2026-08-16
+#
+# Pin a newer 3.x tag if one is out; the DAG only uses the public airflow.sdk API.
+services:
+  airflow:
+    image: apache/airflow:3.3.2
+    environment:
+      AIRFLOW__CORE__LOAD_EXAMPLES: "false"
+      AIRFLOW__CORE__DAGS_FOLDER: /opt/airflow/dags
+      _PIP_ADDITIONAL_REQUIREMENTS: "duckdb>=1.4,<2.0 pydantic>=2.6,<3"
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ../pipeline:/opt/airflow/dags/pipeline
+      - ../data:/opt/airflow/dags/data
+      - ../lake:/opt/airflow/dags/lake
+    ports: ["8080:8080"]
+    command: standalone

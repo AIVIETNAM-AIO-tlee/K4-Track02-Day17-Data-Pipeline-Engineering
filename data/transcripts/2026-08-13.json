@@ -1,0 +1,16 @@
+[
+  {
+    "ticket_id": "T-88",
+    "exported_at": "2026-08-13T23:00:00Z",
+    "turns": [
+      {
+        "role": "customer",
+        "text": "Chatbot nói được hoàn tiền trong 60 ngày nhưng điều khoản ghi 30 ngày."
+      },
+      {
+        "role": "agent",
+        "text": "Chị nói đúng, chính sách hiện hành là 30 ngày. Em đã báo đội AI cập nhật tài liệu nguồn cho chatbot."
+      }
+    ]
+  }
+]
